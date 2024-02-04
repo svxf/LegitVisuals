@@ -32,7 +32,8 @@ public class ChinaHat {
 
         glPushMatrix();
         GlStateManager.disableCull();
-        glDisable(GL_DEPTH_TEST);
+        glEnable(GL_DEPTH_TEST);
+//        glDisable(GL_DEPTH_TEST);
         glDepthMask(false);
         glDisable(GL_TEXTURE_2D);
         glShadeModel(GL_SMOOTH);

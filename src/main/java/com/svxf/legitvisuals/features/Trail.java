@@ -15,6 +15,8 @@ import java.util.List;
 
 import static com.svxf.legitvisuals.utils.Utils.*;
 import static net.minecraft.client.renderer.GlStateManager.disableDepth;
+import static org.lwjgl.opengl.GL11.GL_DEPTH_TEST;
+import static org.lwjgl.opengl.GL11.glEnable;
 
 public class Trail {
     private final List<Vec3> path = new ArrayList<>();
@@ -49,6 +51,7 @@ public class Trail {
         setAlphaLimit(0);
         resetColor();
         setup2DRendering();
+        glEnable(GL_DEPTH_TEST);
         startBlend();
         GL11.glEnable(GL11.GL_LINE_SMOOTH);
         GL11.glHint(GL11.GL_LINE_SMOOTH_HINT, GL11.GL_NICEST);

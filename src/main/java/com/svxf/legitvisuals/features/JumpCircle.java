@@ -11,6 +11,7 @@ import net.weavemc.loader.api.event.SubscribeEvent;
 
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import static com.svxf.legitvisuals.utils.Utils.*;
@@ -43,27 +44,16 @@ public class JumpCircle {
             return;
         }
 
+        Iterator<Circle> iterator = circles.iterator();
 
-        for (Circle circle : circles) {
+        while (iterator.hasNext()) {
+            Circle circle = iterator.next();
             circle.drawCircle();
+
             if (circle.fadeAnimation.finished(Direction.BACKWARDS)) {
-                toRemove.add(circle);
+                iterator.remove();
             }
         }
-
-        for (Circle circle : toRemove) {
-            circles.remove(circle);
-        }
-//        Iterator<Circle> iterator = circles.iterator();
-//
-//        while (iterator.hasNext()) {
-//            Circle circle = iterator.next();
-//            circle.drawCircle();
-//
-//            if (circle.fadeAnimation.finished(Direction.BACKWARDS)) {
-//                iterator.remove();
-//            }
-//        }
     }
 
     private static class Circle {
@@ -93,13 +83,14 @@ public class JumpCircle {
             float animation = expandAnimation.getOutput().floatValue();
             float fade = fadeAnimation.getOutput().floatValue();
             setup2DRendering();
-            glDisable(GL_DEPTH_TEST);
+//            glDisable(GL_DEPTH_TEST);
+            glEnable(GL_DEPTH_TEST);
             glDepthMask(false);
             glShadeModel(GL_SMOOTH);
             double pi2 = PI2;
 
             double xVal = x - mc.getRenderManager().viewerPosX;
-            double yVal = y - mc.getRenderManager().viewerPosY;
+            double yVal = (y - mc.getRenderManager().viewerPosY) + 0.01f;
             double zVal = z - mc.getRenderManager().viewerPosZ;
 
             glBegin(GL_TRIANGLE_STRIP);
