@@ -13,7 +13,7 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.svxf.legitvisuals.utils.Helpers.*;
+import static com.svxf.legitvisuals.utils.Utils.*;
 import static net.minecraft.client.renderer.GlStateManager.disableDepth;
 
 public class Trail {

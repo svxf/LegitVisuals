@@ -14,7 +14,7 @@ import java.lang.reflect.Method;
 
 import static org.lwjgl.opengl.GL11.*;
 
-public class Helpers {
+public class Utils {
     public static Minecraft mc = Minecraft.getMinecraft();
 
     public static final float PI = (float) Math.PI;
@@ -42,7 +42,7 @@ public class Helpers {
         }
     }
 
-    // Blend functions
+    // blend stuff
     public static void startBlend() {
         GlStateManager.enableBlend();
         GlStateManager.blendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -52,7 +52,7 @@ public class Helpers {
         GlStateManager.disableBlend();
     }
 
-    // 2D Rendering setup
+    // 2D rendering
     public static void setup2DRendering(boolean blend) {
         if (blend) {
             startBlend();
@@ -69,7 +69,7 @@ public class Helpers {
         endBlend();
     }
 
-    // Cap
+    // cap
     public static int[] enabledCaps = new int[32];
 
     public static void enableCaps(int... caps) {
@@ -81,7 +81,6 @@ public class Helpers {
         for (int cap : enabledCaps) glDisable(cap);
     }
 
-    // Alpha functions
 
      /**
      * Enables alpha blending and sets the alpha function for OpenGL rendering.
@@ -100,7 +99,7 @@ public class Helpers {
         GlStateManager.color(1, 1, 1, 1);
     }
 
-    // Interpolation functions
+    // interpolation functions!
 
     /**
      * Linearly interpolates between two double values.
@@ -122,7 +121,22 @@ public class Helpers {
         return interpolate(oldValue, newValue, (float) interpolationValue).floatValue();
     }
 
-    // Color interpolation functions
+    public static double[] getInterpolatedPos(Entity entity) {
+        float ticks = getTimer().renderPartialTicks;
+        return new double[]{
+                interpolate(entity.lastTickPosX, entity.posX, ticks) - mc.getRenderManager().viewerPosX,
+                interpolate(entity.lastTickPosY, entity.posY, ticks) - mc.getRenderManager().viewerPosY,
+                interpolate(entity.lastTickPosZ, entity.posZ, ticks) - mc.getRenderManager().viewerPosZ
+        };
+    }
+
+    public static AxisAlignedBB getInterpolatedBoundingBox(Entity entity) {
+        final double[] renderingEntityPos = getInterpolatedPos(entity);
+        final double entityRenderWidth = entity.width / 1.5;
+        return new AxisAlignedBB(renderingEntityPos[0] - entityRenderWidth,
+                renderingEntityPos[1], renderingEntityPos[2] - entityRenderWidth, renderingEntityPos[0] + entityRenderWidth,
+                renderingEntityPos[1] + entity.height + (entity.isSneaking() ? -0.3 : 0.18), renderingEntityPos[2] + entityRenderWidth).expand(0.15, 0.15, 0.15);
+    }
 
     /**
      * Linearly interpolates between two colors represented as integers.
@@ -177,7 +191,6 @@ public class Helpers {
         );
     }
 
-    // Miscellaneous color functions
     public static Color mixColors(Color color1, Color color2) {
         return interpolateColorsBackAndForth(15, 1, color1, color2, false);
     }
@@ -227,7 +240,6 @@ public class Helpers {
         );
     }
 
-    // OpenGL color functions
     /**
      * Sets the OpenGL color using RGBA values.
      *
@@ -242,7 +254,7 @@ public class Helpers {
     }
 
     /**
-     * Sets the OpenGL color using RGBA values, with alpha derived from the color.
+     * Sets the OpenGL color using RGBA values.
      *
      * @param color The color represented as an integer.
      */
@@ -250,13 +262,12 @@ public class Helpers {
         color(color, (float) (color >> 24 & 255) / 255.0F);
     }
 
-
+    // Targeting Stuff
     public static double ticks = 0;
     public static long lastFrame = 0;
 
     public static void drawCircle(Entity entity, float partialTicks, double rad, int color, float alpha) {
         ticks += .004 * (System.currentTimeMillis() - lastFrame);
-
         lastFrame = System.currentTimeMillis();
 
         glPushMatrix();
@@ -276,22 +287,16 @@ public class Helpers {
         glBegin(GL_TRIANGLE_STRIP);
 
         for (float i = 0; i < (Math.PI * 2); i += (float) ((Math.PI * 2) / 64.F)) {
-
             final double vecX = x + rad * Math.cos(i);
             final double vecZ = z + rad * Math.sin(i);
 
             color(color, 0);
-
             glVertex3d(vecX, y - Math.sin(ticks + 1) / 2.7f, vecZ);
-
             color(color, .52f * alpha);
-
-
             glVertex3d(vecX, y, vecZ);
         }
 
         glEnd();
-
 
         glEnable(GL_LINE_SMOOTH);
         glHint(GL_LINE_SMOOTH_HINT, GL_NICEST);
@@ -302,8 +307,8 @@ public class Helpers {
         for (int i = 0; i <= 180; i++) {
             glVertex3d(x - Math.sin(i * PI2 / 90) * rad, y, z + Math.cos(i * PI2 / 90) * rad);
         }
-        glEnd();
 
+        glEnd();
         glShadeModel(GL_FLAT);
         glDepthMask(true);
         glEnable(GL_DEPTH_TEST);
@@ -312,23 +317,6 @@ public class Helpers {
         glEnable(GL_TEXTURE_2D);
         glPopMatrix();
         glColor4f(1f, 1f, 1f, 1f);
-    }
-
-    public static double[] getInterpolatedPos(Entity entity) {
-        float ticks = getTimer().renderPartialTicks;
-        return new double[]{
-                interpolate(entity.lastTickPosX, entity.posX, ticks) - mc.getRenderManager().viewerPosX,
-                interpolate(entity.lastTickPosY, entity.posY, ticks) - mc.getRenderManager().viewerPosY,
-                interpolate(entity.lastTickPosZ, entity.posZ, ticks) - mc.getRenderManager().viewerPosZ
-        };
-    }
-
-    public static AxisAlignedBB getInterpolatedBoundingBox(Entity entity) {
-        final double[] renderingEntityPos = getInterpolatedPos(entity);
-        final double entityRenderWidth = entity.width / 1.5;
-        return new AxisAlignedBB(renderingEntityPos[0] - entityRenderWidth,
-                renderingEntityPos[1], renderingEntityPos[2] - entityRenderWidth, renderingEntityPos[0] + entityRenderWidth,
-                renderingEntityPos[1] + entity.height + (entity.isSneaking() ? -0.3 : 0.18), renderingEntityPos[2] + entityRenderWidth).expand(0.15, 0.15, 0.15);
     }
 
     public static void drawTracerLine(Entity entity, float width, Color color, float alpha) {
@@ -359,6 +347,28 @@ public class Helpers {
         end2DRendering();
 
         glPopMatrix();
+    }
+
+    public static void renderBoundingBox(EntityLivingBase entityLivingBase, Color color, float alpha) {
+        AxisAlignedBB bb = getInterpolatedBoundingBox(entityLivingBase);
+        GlStateManager.pushMatrix();
+        setup2DRendering();
+        enableCaps(GL_BLEND, GL_POINT_SMOOTH, GL_POLYGON_SMOOTH, GL_LINE_SMOOTH);
+
+        glDisable(GL_DEPTH_TEST);
+        glDepthMask(false);
+        glLineWidth(3);
+        float actualAlpha = .3f * alpha;
+        glColor4f(color.getRed(), color.getGreen(), color.getBlue(), actualAlpha);
+        color(color.getRGB(), actualAlpha);
+        renderCustomBoundingBox(bb, true, true);
+        glDepthMask(true);
+        glEnable(GL_DEPTH_TEST);
+
+        disableCaps();
+        end2DRendering();
+
+        GlStateManager.popMatrix();
     }
 
     public static void renderCustomBoundingBox(AxisAlignedBB bb, boolean outline, boolean filled) {
@@ -450,27 +460,5 @@ public class Helpers {
             GL11.glVertex3d(bb.maxX, bb.minY, bb.maxZ);
             GL11.glEnd();
         }
-    }
-
-    public static void renderBoundingBox(EntityLivingBase entityLivingBase, Color color, float alpha) {
-        AxisAlignedBB bb = getInterpolatedBoundingBox(entityLivingBase);
-        GlStateManager.pushMatrix();
-        setup2DRendering();
-        enableCaps(GL_BLEND, GL_POINT_SMOOTH, GL_POLYGON_SMOOTH, GL_LINE_SMOOTH);
-
-        glDisable(GL_DEPTH_TEST);
-        glDepthMask(false);
-        glLineWidth(3);
-        float actualAlpha = .3f * alpha;
-        glColor4f(color.getRed(), color.getGreen(), color.getBlue(), actualAlpha);
-        color(color.getRGB(), actualAlpha);
-        renderCustomBoundingBox(bb, true, true);
-        glDepthMask(true);
-        glEnable(GL_DEPTH_TEST);
-
-        disableCaps();
-        end2DRendering();
-
-        GlStateManager.popMatrix();
     }
 }

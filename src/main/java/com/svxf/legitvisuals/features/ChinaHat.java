@@ -10,7 +10,7 @@ import net.weavemc.loader.api.event.SubscribeEvent;
 
 import java.awt.*;
 
-import static com.svxf.legitvisuals.utils.Helpers.*;
+import static com.svxf.legitvisuals.utils.Utils.*;
 import static org.lwjgl.opengl.GL11.*;
 
 public class ChinaHat {

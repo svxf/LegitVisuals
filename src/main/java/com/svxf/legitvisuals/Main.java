@@ -36,6 +36,8 @@ public class Main implements ModInitializer {
         CommandBus.register(new SecondaryColor());
         CommandBus.register(new FixColor());
 
+
+        ///uhh is there ab etter way to do this? idk
         ChinaHat chinaHat = new ChinaHat();
         JumpCircle jumpCircle = new JumpCircle();
         Targeting targeting = new Targeting();

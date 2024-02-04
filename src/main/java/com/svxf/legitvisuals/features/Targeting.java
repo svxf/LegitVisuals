@@ -13,7 +13,7 @@ import net.weavemc.loader.api.event.SubscribeEvent;
 
 import java.awt.*;
 
-import static com.svxf.legitvisuals.utils.Helpers.*;
+import static com.svxf.legitvisuals.utils.Utils.*;
 
 public class Targeting {
     private EntityLivingBase target;
