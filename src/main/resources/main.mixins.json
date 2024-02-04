@@ -1,0 +1,8 @@
+{
+  "compatibilityLevel": "JAVA_8",
+  "package": "com.svxf.legitvisuals.mixins",
+  "mixins": [
+    "EntityPlayerSPMixin",
+    "PlayerControllerMPMixin"
+  ]
+}

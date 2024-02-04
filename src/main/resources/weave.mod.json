@@ -1,0 +1,13 @@
+{
+  "name": "Legit Visuals",
+  "author": "svxf",
+  "version": "1.0.0",
+  "link": "https://github.com/svxf/LegitVisuals",
+  "modId": "legitvisuals",
+  "mixinConfigs": [
+    "main.mixins.json"
+  ],
+  "entrypoints": [
+    "com.svxf.legitvisuals.Main"
+  ]
+}
