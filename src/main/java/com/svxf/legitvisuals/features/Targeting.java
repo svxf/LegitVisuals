@@ -24,7 +24,7 @@ public class Targeting {
 
     @SubscribeEvent
     public void onAttackEvent(AttackEntityEvent event) {
-        if (!Main.config.targetingEnabled) return;
+        if (!Main.config.targetingEnabled || !Main.config.lvEnabled) return;
         if (event.getTarget() != null)
         {
             target = (EntityLivingBase) event.getTarget();
@@ -35,7 +35,7 @@ public class Targeting {
     @SubscribeEvent
     public void onRender3DEvent(RenderWorldEvent event)
     {
-        if (!Main.config.targetingEnabled || target == null || !target.isEntityAlive()) {
+        if (!Main.config.targetingEnabled || !Main.config.lvEnabled || target == null || !target.isEntityAlive()) {
             target = null;
             return;
         }

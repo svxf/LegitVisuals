@@ -26,7 +26,7 @@ public class JumpCircle {
     @SubscribeEvent
     public void onMotionEvent(MotionEvent event)
     {
-        if (!Main.config.jumpCirclesEnabled) return;
+        if (!Main.config.jumpCirclesEnabled || !Main.config.lvEnabled) return;
         if (!event.isOnGround()) {
             inAir = true;
         } else if (event.isOnGround() && inAir) {
@@ -37,7 +37,7 @@ public class JumpCircle {
 
     @SubscribeEvent
     public void onRenderWorldEvent(RenderWorldEvent event) {
-        if (!Main.config.jumpCirclesEnabled)
+        if (!Main.config.jumpCirclesEnabled || !Main.config.lvEnabled)
         {
             circles.clear();
             toRemove.clear();

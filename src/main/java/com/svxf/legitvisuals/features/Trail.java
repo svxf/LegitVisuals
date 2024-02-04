@@ -21,7 +21,7 @@ public class Trail {
 
     @SubscribeEvent
     public void onMotionEvent(MotionEvent e) {
-        if (!Main.config.trailEnabled)
+        if (!Main.config.trailEnabled || !Main.config.lvEnabled)
         {
             path.clear();
             return;
@@ -38,7 +38,7 @@ public class Trail {
 
     @SubscribeEvent
     public void onRenderWorldEvent(RenderWorldEvent event) {
-        if (!Main.config.trailEnabled) return;
+        if (!Main.config.trailEnabled || !Main.config.lvEnabled) return;
         Pair<Color, Color> colors = Pair.of(Main.config.primaryColor.toJavaColor(), Main.config.secondaryColor.toJavaColor());
         renderLine(path, colors);
     }
