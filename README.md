@@ -32,3 +32,4 @@ This mod is **ONLY** available to use while using Weave
 ---
 
 ![image](https://github.com/svxf/Legit-Visuals/assets/60079016/059d613f-51c2-43a7-b027-5f930bebca90)
+![image](https://github.com/svxf/LegitVisuals/assets/60079016/a03d15ad-854d-4909-b0ea-ab9cac973cd5)
