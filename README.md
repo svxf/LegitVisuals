@@ -1,6 +1,6 @@
 # Legit Visuals
 
-Adds some new features to make Lunar look cooler 😎
+Adds some new features to make Lunar Client look cooler 😎
 
 This mod is **ONLY** available to use while using Weave
 
