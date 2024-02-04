@@ -14,6 +14,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public class PlayerControllerMPMixin {
     @Inject(method = "attackEntity", at = @At("HEAD"))
     public void onAttackEntity(EntityPlayer playerIn, Entity targetEntity, CallbackInfo ci) {
+        System.out.println("ATTACK ENTITY EVENT");
         EventBus.callEvent(new AttackEntityEvent(playerIn, targetEntity));
     }
 }

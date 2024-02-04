@@ -14,8 +14,9 @@ import net.weavemc.loader.api.ModInitializer;
 import net.weavemc.loader.api.command.CommandBus;
 import net.weavemc.loader.api.event.EventBus;
 import net.weavemc.loader.api.event.StartGameEvent;
+import net.weavemc.loader.api.event.SubscribeEvent;
 
-public class Main implements ModInitializer {
+public class LVMain implements ModInitializer {
     public static LegitVisualsConfig config;
 
     @Override
@@ -37,6 +38,11 @@ public class Main implements ModInitializer {
         CommandBus.register(new FixColor());
 
 
+
+    }
+
+    @SubscribeEvent
+    public void onGameStart(StartGameEvent.Post e) {
         ///uhh is there ab etter way to do this? idk
         ChinaHat chinaHat = new ChinaHat();
         JumpCircle jumpCircle = new JumpCircle();

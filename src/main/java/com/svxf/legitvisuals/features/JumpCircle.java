@@ -1,6 +1,6 @@
 package com.svxf.legitvisuals.features;
 
-import com.svxf.legitvisuals.Main;
+import com.svxf.legitvisuals.LVMain;
 import com.svxf.legitvisuals.utils.pair.Pair;
 import com.svxf.legitvisuals.utils.animations.Animation;
 import com.svxf.legitvisuals.utils.animations.impl.DecelerateAnimation;
@@ -11,7 +11,6 @@ import net.weavemc.loader.api.event.SubscribeEvent;
 
 import java.awt.*;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import static com.svxf.legitvisuals.utils.Utils.*;
@@ -26,7 +25,7 @@ public class JumpCircle {
     @SubscribeEvent
     public void onMotionEvent(MotionEvent event)
     {
-        if (!Main.config.jumpCirclesEnabled || !Main.config.lvEnabled) return;
+        if (!LVMain.config.jumpCirclesEnabled || !LVMain.config.lvEnabled) return;
         if (!event.isOnGround()) {
             inAir = true;
         } else if (event.isOnGround() && inAir) {
@@ -37,23 +36,34 @@ public class JumpCircle {
 
     @SubscribeEvent
     public void onRenderWorldEvent(RenderWorldEvent event) {
-        if (!Main.config.jumpCirclesEnabled || !Main.config.lvEnabled)
+        if (!LVMain.config.jumpCirclesEnabled || !LVMain.config.lvEnabled)
         {
             circles.clear();
             toRemove.clear();
             return;
         }
 
-        Iterator<Circle> iterator = circles.iterator();
 
-        while (iterator.hasNext()) {
-            Circle circle = iterator.next();
+        for (Circle circle : circles) {
             circle.drawCircle();
-
             if (circle.fadeAnimation.finished(Direction.BACKWARDS)) {
-                iterator.remove();
+                toRemove.add(circle);
             }
         }
+
+        for (Circle circle : toRemove) {
+            circles.remove(circle);
+        }
+//        Iterator<Circle> iterator = circles.iterator();
+//
+//        while (iterator.hasNext()) {
+//            Circle circle = iterator.next();
+//            circle.drawCircle();
+//
+//            if (circle.fadeAnimation.finished(Direction.BACKWARDS)) {
+//                iterator.remove();
+//            }
+//        }
     }
 
     private static class Circle {
@@ -65,15 +75,15 @@ public class JumpCircle {
             this.x = (float) x;
             this.y = (float) y;
             this.z = (float) z;
-            this.fadeAnimation = new DecelerateAnimation((int) (Main.config.jumpCircleFadeSpeed * 100), 1);
-            this.expandAnimation = new DecelerateAnimation((int) (Main.config.jumpCircleExpandSpeed * 100), Main.config.jumpCircleRadius);
+            this.fadeAnimation = new DecelerateAnimation((int) (LVMain.config.jumpCircleFadeSpeed * 100), 1);
+            this.expandAnimation = new DecelerateAnimation((int) (LVMain.config.jumpCircleExpandSpeed * 100), LVMain.config.jumpCircleRadius);
         }
 
         public void drawCircle() {
-            Pair<Color, Color> colors = Pair.of(Main.config.primaryColor.toJavaColor(), Main.config.secondaryColor.toJavaColor());
-            boolean isRainbow = Main.config.isRainbow;
+            Pair<Color, Color> colors = Pair.of(LVMain.config.primaryColor.toJavaColor(), LVMain.config.secondaryColor.toJavaColor());
+            boolean isRainbow = LVMain.config.isRainbow;
 
-            if (expandAnimation.getOutput() > (Main.config.jumpCircleRadius) * .7f) {
+            if (expandAnimation.getOutput() > (LVMain.config.jumpCircleRadius) * .7f) {
                 fadeAnimation.setDirection(Direction.BACKWARDS);
             }
 
@@ -106,7 +116,7 @@ public class JumpCircle {
                 if (isRainbow) {
                     color = rainbow(7, i * 4, 1, 1, fade * .6f).getRGB();
                 } else {
-                    color = Main.config.isMovingColors ? mixColors(color1, color2).getRGB() :
+                    color = LVMain.config.isMovingColors ? mixColors(color1, color2).getRGB() :
                             interpolateColor(color1.getRGB(), color2.getRGB(), Math.abs(value));
                 }
 

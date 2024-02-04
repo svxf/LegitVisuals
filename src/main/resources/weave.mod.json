@@ -5,9 +5,9 @@
   "link": "https://github.com/svxf/LegitVisuals",
   "modId": "legitvisuals",
   "mixinConfigs": [
-    "main.mixins.json"
+    "lvmain.mixins.json"
   ],
   "entrypoints": [
-    "com.svxf.legitvisuals.Main"
+    "com.svxf.legitvisuals.LVMain"
   ]
 }

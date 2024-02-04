@@ -21,6 +21,7 @@ public abstract class EntityPlayerSPMixin extends AbstractClientPlayer {
     @Inject(method = "onUpdateWalkingPlayer", at = @At("HEAD"), cancellable = true)
     private void onUpdateWalkingPlayerPre(CallbackInfo ci) {
         MotionEvent event = new MotionEvent(posX, posY, posZ, rotationYaw, rotationPitch, onGround);
+        System.out.println("WALK PLAYER EVENT");
         EventBus.callEvent(event);
         if(event.isCancelled()) {
             ci.cancel();

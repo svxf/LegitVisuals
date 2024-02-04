@@ -1,7 +1,7 @@
 package com.svxf.legitvisuals.commands;
 
 import cc.polyfrost.oneconfig.config.core.OneColor;
-import com.svxf.legitvisuals.Main;
+import com.svxf.legitvisuals.LVMain;
 import net.weavemc.loader.api.command.Command;
 
 public class SecondaryColor extends Command {
@@ -25,7 +25,7 @@ public class SecondaryColor extends Command {
                 int green = Integer.parseInt(rgbValues[1]);
                 int blue = Integer.parseInt(rgbValues[2]);
 
-                Main.config.secondaryColor = new OneColor(red, green, blue);
+                LVMain.config.secondaryColor = new OneColor(red, green, blue);
             }
         }
     }

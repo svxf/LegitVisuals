@@ -1,6 +1,6 @@
 package com.svxf.legitvisuals.features;
 
-import com.svxf.legitvisuals.Main;
+import com.svxf.legitvisuals.LVMain;
 import com.svxf.legitvisuals.utils.pair.Pair;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.OpenGlHelper;
@@ -17,8 +17,8 @@ public class ChinaHat {
     @SubscribeEvent
     public void onRender3DEvent(RenderWorldEvent event)
     {
-        if (!Main.config.lvEnabled || !Main.config.hatEnabled || mc.thePlayer == null || mc.theWorld == null || mc.thePlayer.isInvisible() || mc.thePlayer.isDead
-                || (!Main.config.renderInFirstPerson && mc.gameSettings.thirdPersonView == 0)) {
+        if (!LVMain.config.lvEnabled || !LVMain.config.hatEnabled || mc.thePlayer == null || mc.theWorld == null || mc.thePlayer.isInvisible() || mc.thePlayer.isDead
+                || (!LVMain.config.renderInFirstPerson && mc.gameSettings.thirdPersonView == 0)) {
             return;
         }
 
@@ -53,8 +53,8 @@ public class ChinaHat {
         glLineWidth(2);
         glBegin(GL_LINE_LOOP);
 
-        Pair<Color, Color> colors = Pair.of(Main.config.primaryColor.toJavaColor(), Main.config.secondaryColor.toJavaColor());
-        boolean isRainbow = Main.config.isRainbow;
+        Pair<Color, Color> colors = Pair.of(LVMain.config.primaryColor.toJavaColor(), LVMain.config.secondaryColor.toJavaColor());
+        boolean isRainbow = LVMain.config.isRainbow;
 
         // outline/border
         for (int i = 0; i <= 180; i++) {
@@ -63,7 +63,7 @@ public class ChinaHat {
             if (isRainbow) {
                 color1 = rainbow(7, i * 4, 1, 1, .5f);
             } else {
-                color1 = Main.config.isMovingColors ? mixColors(colors.getFirst(), colors.getSecond()) :
+                color1 = LVMain.config.isMovingColors ? mixColors(colors.getFirst(), colors.getSecond()) :
                         new Color(interpolateColor(colors.getFirst().getRGB(), colors.getSecond().getRGB(), value));
             }
 
@@ -91,7 +91,7 @@ public class ChinaHat {
             if (isRainbow) {
                 color1 = rainbow(7, i * 4, 1, 1, .2f);
             } else {
-                color1 = Main.config.isMovingColors ? mixColors(colors.getFirst(), colors.getSecond()) :
+                color1 = LVMain.config.isMovingColors ? mixColors(colors.getFirst(), colors.getSecond()) :
                         new Color(interpolateColorA(colors.getFirst().getRGB(), colors.getSecond().getRGB(), value));
             }
 

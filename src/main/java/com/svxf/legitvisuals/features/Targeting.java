@@ -1,6 +1,6 @@
 package com.svxf.legitvisuals.features;
 
-import com.svxf.legitvisuals.Main;
+import com.svxf.legitvisuals.LVMain;
 import com.svxf.legitvisuals.events.AttackEntityEvent;
 import com.svxf.legitvisuals.utils.pair.Pair;
 import com.svxf.legitvisuals.utils.TimerUtil;
@@ -24,7 +24,7 @@ public class Targeting {
 
     @SubscribeEvent
     public void onAttackEvent(AttackEntityEvent event) {
-        if (!Main.config.targetingEnabled || !Main.config.lvEnabled) return;
+        if (!LVMain.config.targetingEnabled || !LVMain.config.lvEnabled) return;
         if (event.getTarget() != null)
         {
             target = (EntityLivingBase) event.getTarget();
@@ -35,7 +35,7 @@ public class Targeting {
     @SubscribeEvent
     public void onRender3DEvent(RenderWorldEvent event)
     {
-        if (!Main.config.targetingEnabled || !Main.config.lvEnabled || target == null || !target.isEntityAlive()) {
+        if (!LVMain.config.targetingEnabled || !LVMain.config.lvEnabled || target == null || !target.isEntityAlive()) {
             target = null;
             return;
         }
@@ -55,18 +55,18 @@ public class Targeting {
 
         if (auraESPTarget != null) {
             float animationProgress = auraESPAnim.getOutput().floatValue();
-            boolean isRainbow = Main.config.isRainbow;
-            Pair<Color, Color> colors = Pair.of(Main.config.primaryColor.toJavaColor(), Main.config.secondaryColor.toJavaColor());
+            boolean isRainbow = LVMain.config.isRainbow;
+            Pair<Color, Color> colors = Pair.of(LVMain.config.primaryColor.toJavaColor(), LVMain.config.secondaryColor.toJavaColor());
 
             Color finalColor;
             if (isRainbow) {
                 finalColor = rainbow(7, (int) (animationProgress * 4), 1, 1, .5f);
             } else {
-                finalColor = Main.config.isMovingColors ? mixColors(colors.getFirst(), colors.getSecond()) :
+                finalColor = LVMain.config.isMovingColors ? mixColors(colors.getFirst(), colors.getSecond()) :
                         new Color(interpolateColor(colors.getFirst().getRGB(), colors.getSecond().getRGB(), animationProgress));
             }
 
-            switch(Main.config.targetingStyle)
+            switch(LVMain.config.targetingStyle)
             {
                 case 0:
                     drawCircle(auraESPTarget, event.getPartialTicks(), .75f, finalColor.getRGB(), animationProgress);

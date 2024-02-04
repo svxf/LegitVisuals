@@ -1,6 +1,6 @@
 package com.svxf.legitvisuals.features;
 
-import com.svxf.legitvisuals.Main;
+import com.svxf.legitvisuals.LVMain;
 import com.svxf.legitvisuals.events.MotionEvent;
 import com.svxf.legitvisuals.utils.pair.Pair;
 import net.minecraft.client.renderer.GlStateManager;
@@ -21,7 +21,7 @@ public class Trail {
 
     @SubscribeEvent
     public void onMotionEvent(MotionEvent e) {
-        if (!Main.config.trailEnabled || !Main.config.lvEnabled)
+        if (!LVMain.config.trailEnabled || !LVMain.config.lvEnabled)
         {
             path.clear();
             return;
@@ -38,8 +38,8 @@ public class Trail {
 
     @SubscribeEvent
     public void onRenderWorldEvent(RenderWorldEvent event) {
-        if (!Main.config.trailEnabled || !Main.config.lvEnabled) return;
-        Pair<Color, Color> colors = Pair.of(Main.config.primaryColor.toJavaColor(), Main.config.secondaryColor.toJavaColor());
+        if (!LVMain.config.trailEnabled || !LVMain.config.lvEnabled) return;
+        Pair<Color, Color> colors = Pair.of(LVMain.config.primaryColor.toJavaColor(), LVMain.config.secondaryColor.toJavaColor());
         renderLine(path, colors);
     }
 
@@ -56,7 +56,7 @@ public class Trail {
         GL11.glLineWidth(3);
         GL11.glBegin(GL11.GL_LINE_STRIP);
 
-        boolean isRainbow = Main.config.isRainbow;
+        boolean isRainbow = LVMain.config.isRainbow;
         int count = 0;
         int alpha = 200;
         int fadeOffset = 15;
@@ -70,7 +70,7 @@ public class Trail {
             {
                 color(rainbow(7, count * 4, 1, 1, isRainbow ? .5f : .2f).getRGB());
             } else {
-                color(Main.config.isMovingColors ? mixColors(colors.getFirst(), colors.getSecond()).getRGB() :
+                color(LVMain.config.isMovingColors ? mixColors(colors.getFirst(), colors.getSecond()).getRGB() :
                         new Color(interpolateColor(colors.getFirst().getRGB(), colors.getSecond().getRGB(), count)).getRGB());
             }
             final double x = v.xCoord - mc.getRenderManager().viewerPosX;
