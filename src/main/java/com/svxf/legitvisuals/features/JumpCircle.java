@@ -1,11 +1,14 @@
 package com.svxf.legitvisuals.features;
 
 import com.svxf.legitvisuals.LVMain;
-import com.svxf.legitvisuals.utils.pair.Pair;
-import com.svxf.legitvisuals.utils.animations.Animation;
-import com.svxf.legitvisuals.utils.animations.impl.DecelerateAnimation;
-import com.svxf.legitvisuals.utils.animations.Direction;
 import com.svxf.legitvisuals.events.MotionEvent;
+import com.svxf.legitvisuals.utils.animations.Animation;
+import com.svxf.legitvisuals.utils.animations.Direction;
+import com.svxf.legitvisuals.utils.animations.impl.DecelerateAnimation;
+import com.svxf.legitvisuals.utils.pair.Pair;
+import net.minecraft.block.Block;
+import net.minecraft.init.Blocks;
+import net.minecraft.util.BlockPos;
 import net.weavemc.loader.api.event.RenderWorldEvent;
 import net.weavemc.loader.api.event.SubscribeEvent;
 
@@ -27,10 +30,20 @@ public class JumpCircle {
     public void onMotionEvent(MotionEvent event)
     {
         if (!LVMain.config.jumpCirclesEnabled || !LVMain.config.lvEnabled) return;
-        if (!event.isOnGround()) {
+        if (!event.isOnGround() && !inAir) {
+            if (LVMain.config.jumpCircleSpawning == 1)
+            {
+                // did a raycast it so i know the y position they jumped from
+                // otherwise it will spawn it in the air (which is ugly)
+                BlockPos jumpBlockPos = raycastToBlockPos(mc.thePlayer.posX, mc.thePlayer.posY, mc.thePlayer.posZ);
+                if (jumpBlockPos != null) {
+                    circles.add(new Circle(mc.thePlayer.posX, jumpBlockPos.getY() + 1.0, mc.thePlayer.posZ));
+                }
+            }
             inAir = true;
         } else if (event.isOnGround() && inAir) {
-            circles.add(new Circle(mc.thePlayer.posX, mc.thePlayer.posY, mc.thePlayer.posZ));
+            if (LVMain.config.jumpCircleSpawning == 0)
+                circles.add(new Circle(mc.thePlayer.posX, mc.thePlayer.posY, mc.thePlayer.posZ));
             inAir = false;
         }
     }
@@ -54,6 +67,18 @@ public class JumpCircle {
                 iterator.remove();
             }
         }
+    }
+
+    private BlockPos raycastToBlockPos(double startX, double startY, double startZ) {
+        BlockPos blockPos = new BlockPos(startX, startY, startZ);
+        while (blockPos.getY() > 0) {
+            blockPos = blockPos.down();
+            Block block = mc.theWorld.getBlockState(blockPos).getBlock();
+            if (block != Blocks.air && block != Blocks.water && block != Blocks.lava) {
+                return blockPos;
+            }
+        }
+        return null;
     }
 
     private static class Circle {

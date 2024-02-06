@@ -61,6 +61,15 @@ public class LegitVisualsConfig extends Config {
             subcategory = "Jump Circle"
     )
     public float jumpCircleRadius = 0.1f;
+
+    @Dropdown(
+            name = "Circle Spawning",
+            options = {"On Ground", "On Jump"},
+            description = "How the circles should spawn.",
+            subcategory = "Jump Circle"
+    )
+    public int jumpCircleSpawning;
+
     @Number(
             name = "Jump Circle Fade Speed",
             min = 0.0F,

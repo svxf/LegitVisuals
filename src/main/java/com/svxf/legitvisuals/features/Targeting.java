@@ -2,11 +2,11 @@ package com.svxf.legitvisuals.features;
 
 import com.svxf.legitvisuals.LVMain;
 import com.svxf.legitvisuals.events.AttackEntityEvent;
-import com.svxf.legitvisuals.utils.pair.Pair;
 import com.svxf.legitvisuals.utils.TimerUtil;
 import com.svxf.legitvisuals.utils.animations.Animation;
-import com.svxf.legitvisuals.utils.animations.impl.DecelerateAnimation;
 import com.svxf.legitvisuals.utils.animations.Direction;
+import com.svxf.legitvisuals.utils.animations.impl.DecelerateAnimation;
+import com.svxf.legitvisuals.utils.pair.Pair;
 import net.minecraft.entity.EntityLivingBase;
 import net.weavemc.loader.api.event.RenderWorldEvent;
 import net.weavemc.loader.api.event.SubscribeEvent;
@@ -25,7 +25,7 @@ public class Targeting {
     @SubscribeEvent
     public void onAttackEvent(AttackEntityEvent event) {
         if (!LVMain.config.targetingEnabled || !LVMain.config.lvEnabled) return;
-        if (event.getTarget() != null)
+        if (event.getTarget() != null && (event.getTarget() instanceof EntityLivingBase)) // forgot to check if it was an instance of living base
         {
             target = (EntityLivingBase) event.getTarget();
             targetTimer.reset();
@@ -68,14 +68,14 @@ public class Targeting {
 
             switch(LVMain.config.targetingStyle)
             {
-                case 0:
+                case 0: // circle style
                     drawCircle(auraESPTarget, event.getPartialTicks(), .75f, finalColor.getRGB(), animationProgress);
                     break;
-                case 1:
+                case 1: // tracer style
                     drawTracerLine(auraESPTarget, 4f, Color.BLACK, auraESPAnim.getOutput().floatValue());
                     drawTracerLine(auraESPTarget, 2.5f, finalColor, auraESPAnim.getOutput().floatValue());
                     break;
-                case 2:
+                case 2: // cube style
                     renderBoundingBox(auraESPTarget, finalColor, auraESPAnim.getOutput().floatValue());
                     break;
             }
